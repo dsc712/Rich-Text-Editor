@@ -1,0 +1,24 @@
+.editor {
+    /*no style*/
+
+}
+body {
+    color: #666666;
+}
+.outer {
+    padding: 10px;
+    margin: 100px 100px;
+    border: 1px solid #dddddd;
+}
+.btn {
+    border: 2px solid #dddddd;
+    background-color: #666666;
+    border-radius: 15%;
+    color: #ffffff;
+    padding: 4px 18px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.controls {
+    margin-bottom: 20px;
+}

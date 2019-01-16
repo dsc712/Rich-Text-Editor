@@ -1,0 +1,8 @@
+.var {
+    background: #ddd;
+    color: #666666;
+    padding: 5px;
+    margin: 2px;
+    cursor: pointer;
+    border-radius: 2%;
+}
