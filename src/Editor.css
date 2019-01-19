@@ -1,24 +1,37 @@
 .editor {
-    /*no style*/
-
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    cursor: text;
+    padding: 15px 30px;
+    border-radius: 2px;
+    margin: 10px 150px;
+    box-shadow: inset 0px 1px 8px -3px #ABABAB;
+    background: #fefefe;
+    font-size: 1.1em;
 }
+body {
+    background: #efefef;
+}
+
+.editor :global(.public-DraftEditor-content) {
+    min-height: 140px;
+}
+
 body {
     color: #666666;
 }
-.outer {
-    padding: 10px;
-    margin: 100px 100px;
-    border: 1px solid #dddddd;
+
+.draftJsEmojiPlugin__emojiSelectButton__3sPol {
+    margin-right: 100px;
 }
+
+
 .btn {
-    border: 2px solid #dddddd;
-    background-color: #666666;
-    border-radius: 15%;
-    color: #ffffff;
+    border: 1px solid #dddddd;
+    background-color: #ffffff;
+    color: #888888;
     padding: 4px 18px;
     font-size: 16px;
     cursor: pointer;
-}
-.controls {
-    margin-bottom: 20px;
 }

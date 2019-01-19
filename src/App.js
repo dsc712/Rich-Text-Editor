@@ -4,9 +4,7 @@ import MyEditor from './Editor'
 class App extends Component {
   render() {
     return (
-        <div className="outer">
-          <MyEditor className={"editor"} />
-        </div>
+        <MyEditor/>
     );
   }
 }

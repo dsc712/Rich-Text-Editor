@@ -8,7 +8,7 @@ class BlockVariable extends Component {
 
     state = {
         type: '',
-        order: ['Amount', 'Start At', 'End At', 'Tax'],
+        order: ['order.amount', 'order.startAt', 'order.endAt', 'order.tax'],
         text: ''
     };
 

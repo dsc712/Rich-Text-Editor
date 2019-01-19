@@ -19,9 +19,10 @@ class Variable extends Component {
         const editorState = this.props.editorState;
         console.log( editorState );
         const contentState = editorState.getCurrentContent();
-        const entityKey = contentState.createEntity('variable', 'IMMUTABLE');
+        const entity = contentState.createEntity('variable', 'IMMUTABLE', {data : 1000 });
+        const entityKey = entity.getLastCreatedEntityKey();
+
         let withAtomic;
-        console.log( this.props.block );
         if( this.props.block ) {
             let character = '{{';
             for( let i = 0; i < this.props.block.length; i++ ) {
