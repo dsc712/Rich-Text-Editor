@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { EditorState, AtomicBlockUtils, Modifier, convertToRaw } from 'draft-js';
+import { OrderedSet } from 'immutable'
 import './Variable.css';
 
 class Variable extends Component {
@@ -19,7 +20,7 @@ class Variable extends Component {
 
         let withAtomic, entity, entityKey;
 
-        // For handling vlock variable
+        // For handling block variable
         if( this.props.block ) {
             entity = contentState.createEntity('variable', 'IMMUTABLE', { Amount: 1000, Tax: 15.00, StartAt: '13/10/2019', EndAt: '20/10/18' });
             entityKey = entity.getLastCreatedEntityKey();

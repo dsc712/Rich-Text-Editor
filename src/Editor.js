@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { EditorState, RichUtils } from 'draft-js';
+import { convertToRaw, EditorState, RichUtils } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 
 import createEmojiPlugin from 'draft-js-emoji-plugin';
@@ -18,11 +18,13 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import 'draft-js-mention-plugin/lib/plugin.css';
 
 import mentions from './mentions';
+import prettyJson from 'prettyjson';
 
 
 import Variable from './Variable';
 import BlockVariable from './BlockVariable';
 import './Editor.css'
+import './Variable.css'
 
 // emoji plugin
 const emojiPlugin = createEmojiPlugin();
@@ -48,7 +50,7 @@ class MyEditor extends Component {
     constructor(props) {
         super(props);
         this.state = {editorState: EditorState.createEmpty(), suggestions: mentions};
-        this.onChange = (editorState) => this.setState({editorState});
+        this.onChange = (editorState) => this.setState({editorState, data: "{ Fetch content state }"});
     }
 
     onSearchChange = ({ value }) => {
@@ -56,6 +58,7 @@ class MyEditor extends Component {
             suggestions: defaultSuggestionsFilter(value, mentions),
         });
     };
+
 
     onAddMention = () => {
     };
@@ -70,35 +73,55 @@ class MyEditor extends Component {
         return 'non-handled'
     };
 
-    handleAction = (e) => {
-        const command = e.target.getAttribute('data-command');
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, command));
+    getContentStateInJSON = () => {
+        const rawJson = convertToRaw( this.state.editorState.getCurrentContent() );
+        const jsonStr = JSON.stringify(rawJson, null, 1);
+
+        this.setState({ data: jsonStr });
+
+    };
+
+    styleMap = {
+        'STRIKETHROUGH': {
+            background: "#999999",
+            color: "white",
+            padding: "7px",
+        }
     };
 
     render() {
         return (
             <div className={"editor"} >
-                <Editor
-                    editorState={ this.state.editorState }
-                    onChange={ this.onChange }
-                    plugins={[emojiPlugin,inlineToolbarPlugin, sideToolbarPlugin, linkPlugin, mentionPlugin]}
-                    handleKeyCommand={ this.handleKeyCommand }
-                />
-                <InlineToolbar />
-                <SideToolbar />
-                <EmojiSuggestions />
-                <MentionSuggestions
-                    onSearchChange= { this.onSearchChange }
-                    suggestions= { this.state.suggestions }
-                    onAddMention= { this.onAddMention }
-                />
-                <EmojiSelect />
-                <Variable onChange={ this.onChange } editorState={ this.state.editorState } value={"organization.name"}/>
-                <Variable  onChange={ this.onChange }  editorState={ this.state.editorState } value={"organization.phone"}/>
-                <Variable  onChange={ this.onChange }  editorState={ this.state.editorState } value={"organization.email"}/>
-                <BlockVariable onChange={ this.onChange } editorState={ this.state.editorState } value={"order"} type={"order"}/>
-            </div>
+                <div style={{ padding: "10px", border: "1px solid #ddd"}}>
+                    <Editor
+                        editorState={ this.state.editorState }
+                        onChange={ this.onChange }
+                        plugins={[emojiPlugin,inlineToolbarPlugin, sideToolbarPlugin, linkPlugin, mentionPlugin]}
+                        handleKeyCommand={ this.handleKeyCommand }
+                        customStyleMap={this.styleMap}
+                    />
+                    <InlineToolbar />
+                    <SideToolbar />
+                    <EmojiSuggestions />
+                    <MentionSuggestions
+                        onSearchChange= { this.onSearchChange }
+                        suggestions= { this.state.suggestions }
+                        onAddMention= { this.onAddMention }
+                    />
+                </div>
 
+                <div style={{ border: "1px solid #ddd", padding: "10px"}}>
+                    <EmojiSelect />
+                    <Variable onChange={ this.onChange } editorState={ this.state.editorState } value={"organization.name"}/>
+                    <Variable  onChange={ this.onChange }  editorState={ this.state.editorState } value={"organization.phone"}/>
+                    <Variable  onChange={ this.onChange }  editorState={ this.state.editorState } value={"organization.email"}/>
+                    <BlockVariable onChange={ this.onChange } editorState={ this.state.editorState } value={"order"} type={"order"}/>
+                </div>
+                <button style={{ marginTop: "30px", marginLeft:"0px" }} className={"var"} onClick={ this.getContentStateInJSON }>Fetch Content State</button>
+                <div style={{ background: "#345678", color: "#fff", padding: "20px" }}>
+                    <pre>{ this.state.data  }</pre>
+                </div>
+            </div>
         );
     }
 }

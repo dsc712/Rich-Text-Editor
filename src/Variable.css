@@ -1,10 +1,15 @@
 .var {
-    display: inline-block;
     background: #ffffff;
-    color: #888;
+    color: #999999;
     padding: 7px;
     margin-left: 20px;
     border: 1px solid #dddddd;
     cursor: pointer;
     border-radius: 5%;
 }
+
+.var:active {
+    outline: none;
+    border: none;
+}
+.var:focus {outline:0;}
