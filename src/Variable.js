@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import { EditorState, AtomicBlockUtils, Modifier } from 'draft-js';
+import { EditorState, AtomicBlockUtils, Modifier, convertToRaw } from 'draft-js';
 import './Variable.css';
 
 class Variable extends Component {
-    constructor( props ) {
-        super( props );
-    }
 
     state = {
         text: '',
@@ -17,40 +14,55 @@ class Variable extends Component {
 
     handleVariable = () => {
         const editorState = this.props.editorState;
-        console.log( editorState );
         const contentState = editorState.getCurrentContent();
-        const entity = contentState.createEntity('variable', 'IMMUTABLE', {data : 1000 });
-        const entityKey = entity.getLastCreatedEntityKey();
+        const selection = editorState.getSelection();
 
-        let withAtomic;
+        let withAtomic, entity, entityKey;
+
+        // For handling vlock variable
         if( this.props.block ) {
+            entity = contentState.createEntity('variable', 'IMMUTABLE', { Amount: 1000, Tax: 15.00, StartAt: '13/10/2019', EndAt: '20/10/18' });
+            entityKey = entity.getLastCreatedEntityKey();
+
             let character = '{{';
             for( let i = 0; i < this.props.block.length; i++ ) {
                 character += ' \n     {{ ' + this.props.block[i].props.value + ' }}';
             }
             character += ' \n}}';
+
             withAtomic = AtomicBlockUtils.insertAtomicBlock(
                 editorState,
                 entityKey,
                 character
             );
 
-        }else {
-            withAtomic = AtomicBlockUtils.insertAtomicBlock(
-                editorState,
-                entityKey,
-                '{{ ' + this.state.text + ' }}'
-            );
-        }
+            const nextContentState = withAtomic.getCurrentContent();
+            const blockMap = nextContentState.getBlockMap();
+            const newContentState = contentState.set('blockMap', blockMap);
+            const newEditorState = EditorState.createWithContent(newContentState);
 
-        const nextContentState = withAtomic.getCurrentContent();
-        const blockMap = nextContentState.getBlockMap();
-        console.log(blockMap);
-        const newContentState = contentState.set('blockMap', blockMap);
-        const newEditorState = EditorState.createWithContent(newContentState);
-        this.props.onChange(EditorState.moveFocusToEnd(
-            newEditorState
-        ));
+            const rawJson = convertToRaw(newContentState);
+            const jsonStr = JSON.stringify(rawJson, null, 1);
+
+            console.log(jsonStr);
+
+            this.props.onChange(EditorState.moveFocusToEnd(
+                newEditorState
+            ));
+
+        } else {
+
+            // for handling inline variable
+            entity = contentState.createEntity('variable', 'IMMUTABLE', { name: 'MyDesk Spaces', email: 'abc@g.com', phone: '9210284637' });
+            entityKey = entity.getLastCreatedEntityKey();
+            const textWithEntity = Modifier.insertText( contentState, selection, "{{ " + this.state.text + " }}", null, entityKey);
+
+            this.props.onChange( EditorState.push(editorState, textWithEntity, 'insert-characters'));
+            const rawJson = convertToRaw(textWithEntity);
+            const jsonStr = JSON.stringify(rawJson, null, 1);
+
+            console.log(jsonStr);
+        }
     };
 
     render() {

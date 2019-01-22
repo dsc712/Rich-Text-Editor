@@ -51,9 +51,6 @@ class MyEditor extends Component {
         this.onChange = (editorState) => this.setState({editorState});
     }
 
-
-
-
     onSearchChange = ({ value }) => {
         this.setState({
             suggestions: defaultSuggestionsFilter(value, mentions),
@@ -80,7 +77,7 @@ class MyEditor extends Component {
 
     render() {
         return (
-            <div className={"editor"}>
+            <div className={"editor"} >
                 <Editor
                     editorState={ this.state.editorState }
                     onChange={ this.onChange }

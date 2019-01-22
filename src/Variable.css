@@ -1,4 +1,5 @@
 .var {
+    display: inline-block;
     background: #ffffff;
     color: #888;
     padding: 7px;
