@@ -14,6 +14,11 @@
 body {
     background: #efefef;
 }
+.atomic {
+    color: #999;
+    font-family: 'Hoefler Text', Georgia, serif;
+    font-style: italic;
+}
 
 .editor :global(.public-DraftEditor-content) {
     min-height: 140px;

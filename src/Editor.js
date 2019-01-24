@@ -83,9 +83,14 @@ class MyEditor extends Component {
 
     styleMap = {
         'STRIKETHROUGH': {
-            background: "#999999",
-            color: "white",
-            padding: "7px",
+            color: "#999"
+        }
+    };
+
+    myBlockStyleFn = ( contentBlock ) => {
+        const type = contentBlock.getType();
+        if (type === 'atomic') {
+            return 'atomic';
         }
     };
 
@@ -99,6 +104,7 @@ class MyEditor extends Component {
                         plugins={[emojiPlugin,inlineToolbarPlugin, sideToolbarPlugin, linkPlugin, mentionPlugin]}
                         handleKeyCommand={ this.handleKeyCommand }
                         customStyleMap={this.styleMap}
+                        blockStyleFn={ this.myBlockStyleFn }
                     />
                     <InlineToolbar />
                     <SideToolbar />

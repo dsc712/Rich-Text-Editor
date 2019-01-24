@@ -25,11 +25,11 @@ class Variable extends Component {
             entity = contentState.createEntity('variable', 'IMMUTABLE', { Amount: 1000, Tax: 15.00, StartAt: '13/10/2019', EndAt: '20/10/18' });
             entityKey = entity.getLastCreatedEntityKey();
 
-            let character = '{{';
+            let character = '';
             for( let i = 0; i < this.props.block.length; i++ ) {
                 character += ' \n     {{ ' + this.props.block[i].props.value + ' }}';
             }
-            character += ' \n}}';
+            // character += ' \n}}';
 
             withAtomic = AtomicBlockUtils.insertAtomicBlock(
                 editorState,
@@ -54,7 +54,7 @@ class Variable extends Component {
         } else {
 
             // for handling inline variable
-            entity = contentState.createEntity('variable', 'IMMUTABLE', { name: 'MyDesk Spaces', email: 'abc@g.com', phone: '9210284637' });
+            entity = contentState.createEntity('variable', 'IMMUTABLE', { name: 'MyDesk Spaces', email: 'abc@g.com', phone: '9210284xxx' });
             entityKey = entity.getLastCreatedEntityKey();
             const textWithEntity = Modifier.insertText( contentState, selection, "{{ " + this.state.text + " }}", null, entityKey);
 
