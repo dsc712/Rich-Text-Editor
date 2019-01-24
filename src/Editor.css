@@ -10,6 +10,19 @@
     background: #fefefe;
     font-size: 1.1em;
 }
+Select {
+    background: #345678 ;
+    padding: 4px;
+    color: white;
+    border: #345678;
+}
+
+Select:active {
+    outline: none;
+    border: none;
+    border: #345678;
+}
+Select:focus { outline:0; border: #345678 }
 
 body {
     background: #efefef;

@@ -18,7 +18,12 @@ import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-
 import 'draft-js-mention-plugin/lib/plugin.css';
 
 import mentions from './mentions';
-import prettyJson from 'prettyjson';
+
+import createMarkdownPlugin from 'draft-js-markdown-plugin';
+
+import createPrismPlugin from 'draft-js-prism-plugin';
+import Prism from 'prismjs';
+import 'prismjs/themes/prism-solarizedlight.css';
 
 
 import Variable from './Variable';
@@ -44,6 +49,14 @@ const linkPlugin = createLinkifyPlugin({ target: '_blank' });
 // mention plugin
 const mentionPlugin = createMentionPlugin();
 const { MentionSuggestions } = mentionPlugin;
+
+
+const features = {
+    inline: ['BOLD', 'ITALIC', 'CODE', 'STRIKETHROUGH', 'LINK', 'IMAGE'],
+    block: ['CODE', 'header-one', 'header-two', 'header-three', 'header-four', 'header-five', 'header-six', 'ordered-list-item', 'unordered-list-item', 'blockquote'],
+};
+const markDownPlugin = createMarkdownPlugin({ features });
+const prismPlugin = createPrismPlugin({ prism: Prism });
 
 class MyEditor extends Component {
 
@@ -84,13 +97,21 @@ class MyEditor extends Component {
     styleMap = {
         'STRIKETHROUGH': {
             color: "#999"
+        }, 'CODE': {
+            backgroundColor: '#345678',
+            color: "#fff",
+            fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+            fontSize: 16,
+            padding: 2
         }
     };
 
     myBlockStyleFn = ( contentBlock ) => {
-        const type = contentBlock.getType();
-        if (type === 'atomic') {
-            return 'atomic';
+
+        switch (contentBlock.getType()) {
+            case 'code-block': return 'language-javascript';
+            case 'atomic': return 'atomic';
+            default: return null;
         }
     };
 
@@ -101,9 +122,9 @@ class MyEditor extends Component {
                     <Editor
                         editorState={ this.state.editorState }
                         onChange={ this.onChange }
-                        plugins={[emojiPlugin,inlineToolbarPlugin, sideToolbarPlugin, linkPlugin, mentionPlugin]}
+                        plugins={[emojiPlugin,inlineToolbarPlugin, sideToolbarPlugin, linkPlugin, mentionPlugin, markDownPlugin, prismPlugin ]}
                         handleKeyCommand={ this.handleKeyCommand }
-                        customStyleMap={this.styleMap}
+                        customStyleMap={this.styleMap }
                         blockStyleFn={ this.myBlockStyleFn }
                     />
                     <InlineToolbar />
